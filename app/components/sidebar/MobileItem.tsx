@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import clsx from 'clsx';
+import { useContext } from 'react';
+import { ThemeContext } from '../ThemeContext';
 
 interface MobileItemProps {
   icon: any;
@@ -16,6 +18,8 @@ const MobileItem: React.FC<MobileItemProps> = ({
   onClick,
   active,
 }) => {
+  const { theme } = useContext(ThemeContext);
+
   const handleClick = () => {
     if (onClick) {
       return onClick();
@@ -26,9 +30,12 @@ const MobileItem: React.FC<MobileItemProps> = ({
       onClick={onClick}
       className={clsx(
         `
-    group flex gap-x-3 text-sm leading-6 font-semibold w-full justify-center p-4 text-gray-500 hover:text-black hover:bg-gray-100
+    group flex gap-x-3 text-sm leading-6 font-semibold w-full text-gray-500  justify-center p-4  ${
+      theme === 'light' ? 'hover:text-black' : 'hover:text-gray-300'
+    }  ${theme === 'light' ? 'hover:bg-gray-100' : 'hover:bg-gray-700'}
     `,
-        active && 'bg-gray-100 text-black'
+        active && theme === 'light' && 'bg-gray-100 text-black',
+        active && theme === 'dark' && 'bg-gray-700 text-gray-200'
       )}
       href={href}
     >

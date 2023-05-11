@@ -2,6 +2,8 @@
 
 import clsx from 'clsx';
 import Link from 'next/link';
+import { useContext } from 'react';
+import { ThemeContext } from '../ThemeContext';
 
 interface DesktopItemProps {
   label: string;
@@ -23,6 +25,7 @@ const DesktopItem: React.FC<DesktopItemProps> = ({
       return onClick();
     }
   };
+  const { theme, setTheme } = useContext(ThemeContext);
 
   return (
     <li onClick={handleClick}>
@@ -30,9 +33,12 @@ const DesktopItem: React.FC<DesktopItemProps> = ({
         href={href}
         className={clsx(
           `
-      group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold text-gray-500 hover:text-black hover:bg-gray-100
+      group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold  text-gray-500 ${
+        theme === 'light' ? 'hover:text-black' : 'hover:text-gray-300'
+      }  ${theme === 'light' ? 'hover:bg-gray-100' : 'hover:bg-gray-800'}
       `,
-          active && 'bg-gray-100 text-black'
+          active && theme === 'light' && 'bg-gray-100 text-black',
+          active && theme === 'dark' && 'bg-gray-800 text-white'
         )}
       >
         <Icon className='h-6 w-6 shrink-0' />

@@ -2,7 +2,7 @@
 
 import Button from '@/app/components/Button';
 import Input from '@/app/components/Inputs/Input';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
 import AuthSocialButton from './AuthSocialButton';
 import { BsGithub, BsGoogle } from 'react-icons/bs';
@@ -10,6 +10,7 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { ThemeContext } from '@/app/components/ThemeContext';
 
 type Variant = 'LOGIN' | 'REGISTER';
 
@@ -18,6 +19,7 @@ const AuthForm = () => {
   const router = useRouter();
   const [variant, setVariant] = useState<Variant>('LOGIN');
   const [isLoading, setIsLoading] = useState(false);
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     if (session?.status === 'authenticated') {
@@ -108,7 +110,11 @@ const AuthForm = () => {
 
   return (
     <div className='mt-8 sm:mx-auto sm:w-full sm:max-w-md'>
-      <div className='bg-white px-4 py-4 shadow sm:rounded-lg sm:px-10'>
+      <div
+        className={`${
+          theme === 'light' ? 'bg-white' : 'bg-gray-900'
+        }  px-4 py-4 shadow sm:rounded-lg sm:px-10`}
+      >
         <form className='space-y-6' onSubmit={handleSubmit(onSubmit)}>
           {variant === 'REGISTER' && (
             <Input
@@ -147,10 +153,18 @@ const AuthForm = () => {
         <div className='mt-6'>
           <div className='relative'>
             <div className='absolute inset-0 flex items-center'>
-              <div className='w-full border-t border-gray-300' />
+              <div
+                className={`w-full border-t ${
+                  theme === 'light' ? 'border-gray-300' : 'border-gray-700'
+                } `}
+              />
             </div>
             <div className='relative flex justify-center text-sm'>
-              <span className='bg-white px-2 text-gray-500'>
+              <span
+                className={`${
+                  theme === 'light' ? 'bg-white' : 'bg-gray-900'
+                } px-2 text-gray-500`}
+              >
                 Or continue with
               </span>
             </div>
@@ -172,7 +186,12 @@ const AuthForm = () => {
               ? 'New to Messenger?'
               : 'Already have an account'}
           </div>
-          <div className='underline cursor-pointer' onClick={toggleVariant}>
+          <div
+            className={`underline cursor-pointer ${
+              theme === 'light' ? 'text-black' : 'text-gray-400'
+            }`}
+            onClick={toggleVariant}
+          >
             {variant === 'LOGIN' ? 'Create an account' : 'Login'}
           </div>
         </div>

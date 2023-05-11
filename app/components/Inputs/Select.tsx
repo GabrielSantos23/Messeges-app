@@ -1,6 +1,8 @@
 'use client';
 
+import { useContext } from 'react';
 import ReactSelect from 'react-select';
+import { ThemeContext } from '../ThemeContext';
 
 interface SelectProps {
   label: string;
@@ -17,9 +19,15 @@ const Select: React.FC<SelectProps> = ({
   options,
   disabled,
 }) => {
+  const { theme } = useContext(ThemeContext);
+  const backgroundColor = theme === 'light' ? 'white' : 'gray.800';
   return (
     <div className='z-[100]'>
-      <label className='block text-sm font-medium leading-6 text-gray-900'>
+      <label
+        className={`block text-sm font-medium leading-6 ${
+          theme === 'light' ? 'text-gray-900' : 'text-gray-200'
+        } `}
+      >
         {label}
       </label>
       <div className='mt-2'>
@@ -34,6 +42,10 @@ const Select: React.FC<SelectProps> = ({
             menuPortal: (base) => ({
               ...base,
               zIndex: 9999,
+            }),
+            control: (provided) => ({
+              ...provided,
+              backgroundColor: backgroundColor,
             }),
           }}
           classNames={{

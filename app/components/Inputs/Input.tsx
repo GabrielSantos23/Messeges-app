@@ -1,7 +1,9 @@
 'use client';
 
 import clsx from 'clsx';
+import { useContext } from 'react';
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
+import { ThemeContext } from '../ThemeContext';
 
 interface InputProps {
   label: string;
@@ -22,10 +24,14 @@ const Input: React.FC<InputProps> = ({
   errors,
   disabled,
 }) => {
+  const { theme, setTheme } = useContext(ThemeContext);
+
   return (
     <div>
       <label
-        className='block text-sm font-medium leading-6 text-gray-900'
+        className={`block text-sm font-medium leading-6 ${
+          theme === 'light' ? 'text-gray-900' : 'text-gray-200'
+        }`}
         htmlFor={id}
       >
         {label}
@@ -39,10 +45,15 @@ const Input: React.FC<InputProps> = ({
           className={clsx(
             `
           form-input
-          block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-40 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6
+          block w-full rounded-md border-0 py-1.5 ${
+            theme === 'light' ? 'text-gray-900' : 'text-gray-200'
+          } shadow-sm ring-1 ring-inset  ${
+              theme === 'light' ? 'ring-gray-300' : 'ring-gray-500'
+            } placeholder:text-gray-40 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:text-sm sm:leading-6
           `,
             errors[id] && 'focus:ring-rose-500',
-            disabled && 'opacity-50 cursor-default'
+            disabled && 'opacity-50 cursor-default',
+            theme === 'light' ? 'bg-white' : 'bg-gray-800'
           )}
         />
       </div>

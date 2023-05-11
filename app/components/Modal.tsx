@@ -1,8 +1,9 @@
 'use client';
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { IoClose } from 'react-icons/io5';
+import { ThemeContext } from './ThemeContext';
 
 interface ModalProps {
   isOpen?: boolean;
@@ -11,6 +12,7 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  const { theme, setTheme } = useContext(ThemeContext);
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as='div' className='relative z-50' onClose={onClose}>
@@ -56,12 +58,12 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
               leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
             >
               <Dialog.Panel
-                className='
+                className={`
                   relative 
                   transform 
                   overflow-hidden 
                   rounded-lg 
-                  bg-white 
+                  ${theme === 'light' ? 'bg-white' : 'bg-gray-800'}
                   px-4 
                   pb-4
                   pt-5 
@@ -73,7 +75,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
                   sm:w-full 
                   sm:max-w-lg 
                   sm:p-6
-                '
+                `}
               >
                 <div
                   className='
@@ -89,20 +91,27 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
                 >
                   <button
                     type='button'
-                    className='
+                    className={`
                       rounded-md 
-                      bg-white 
-                      text-gray-400 
+                      ${theme === 'light' ? 'bg-white' : 'bg-gray-800'}
+                      ${theme === 'light' ? 'text-gray-400 ' : 'text-gray-100'}
                       hover:text-gray-500 
                       focus:outline-none 
                       focus:ring-2 
                       focus:ring-indigo-500 
                       focus:ring-offset-2
-                    '
+                    `}
                     onClick={onClose}
                   >
                     <span className='sr-only'>Close</span>
-                    <IoClose className='h-6 w-6' aria-hidden='true' />
+                    <IoClose
+                      className={`h-6 w-6
+                  ${theme === 'light' ? 'bg-white' : 'bg-gray-800'}
+                    
+                    
+                    `}
+                      aria-hidden='true'
+                    />
                   </button>
                 </div>
                 {children}

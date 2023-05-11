@@ -2,11 +2,12 @@
 
 import useConversation from '@/app/hooks/useConversation';
 import { FullMessageType } from '@/app/types';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import MessageBox from './MessageBox';
 import axios from 'axios';
 import { pusherClient } from '@/app/libs/pusher';
 import { find } from 'lodash';
+import { ThemeContext } from '@/app/components/ThemeContext';
 
 interface BodyProps {
   initialMessages: FullMessageType[];
@@ -15,6 +16,7 @@ interface BodyProps {
 const Body: React.FC<BodyProps> = ({ initialMessages }) => {
   const [messages, setMessages] = useState(initialMessages);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const { theme } = useContext(ThemeContext);
 
   const { conversationId } = useConversation();
 
@@ -60,7 +62,11 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
   }, [conversationId]);
 
   return (
-    <div className='flex-1 overflow-y-auto'>
+    <div
+      className={`flex-1 overflow-y-auto  ${
+        theme === 'light' ? 'bg-white' : 'bg-gray-800'
+      }`}
+    >
       {messages.map((message, i) => (
         <MessageBox
           isLast={i === messages.length - 1}

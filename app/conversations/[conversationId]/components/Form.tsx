@@ -6,9 +6,12 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import axios from 'axios';
 import { CldUploadButton } from 'next-cloudinary';
 import useConversation from '@/app/hooks/useConversation';
+import { useContext } from 'react';
+import { ThemeContext } from '@/app/components/ThemeContext';
 
 const Form = () => {
   const { conversationId } = useConversation();
+  const { theme } = useContext(ThemeContext);
 
   const {
     register,
@@ -38,17 +41,18 @@ const Form = () => {
 
   return (
     <div
-      className='
+      className={`
         py-4 
         px-4 
-        bg-white 
-        border-t 
+        ${theme === 'light' ? 'bg-white' : 'bg-gray-800'}
+        border-t
+        ${theme === 'light' ? 'lg:border-gray-200' : 'lg:border-gray-900'}  
         flex 
         items-center 
         gap-2 
         lg:gap-4 
         w-full
-      '
+      `}
     >
       <CldUploadButton
         options={{ maxFiles: 1 }}

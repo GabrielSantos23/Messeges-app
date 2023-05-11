@@ -1,6 +1,8 @@
 'use client';
 
 import clsx from 'clsx';
+import { useContext } from 'react';
+import { ThemeContext } from './ThemeContext';
 
 interface ButtonProps {
   type?: 'button' | 'submit' | 'reset' | undefined;
@@ -21,6 +23,8 @@ const Button: React.FC<ButtonProps> = ({
   danger,
   disabled,
 }) => {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <button
       onClick={onClick}
@@ -28,9 +32,10 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       className={clsx(
         `flex justify-center rounded-md px-3 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2`,
-        disabled && 'opacity-50 cursor-default',
+        disabled && 'opacity-50 cursor-default capitalize',
         fullWidth && 'w-full',
         secondary ? 'text-gray-900' : 'text-white',
+        secondary && theme === 'light' ? 'text-gray-900' : 'text-white',
         danger &&
           'bg-rose-500 hover:bg-rose-600 focus-visible:outline-rose-600',
         !secondary &&

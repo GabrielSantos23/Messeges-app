@@ -3,7 +3,7 @@
 import { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { MdOutlineGroupAdd } from 'react-icons/md';
 import clsx from 'clsx';
 import { find } from 'lodash';
@@ -13,6 +13,7 @@ import { pusherClient } from '@/app/libs/pusher';
 import GroupChatModal from '@/app/conversations/components/GroupChatModal';
 import ConversationBox from './ConversationBox';
 import { FullConversationType } from '@/app/types';
+import { ThemeContext } from '@/app/components/ThemeContext';
 
 interface ConversationListProps {
   initialItems: FullConversationType[];
@@ -31,6 +32,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   const session = useSession();
 
   const { conversationId, isOpen } = useConversation();
+  const { theme } = useContext(ThemeContext);
 
   const pusherKey = useMemo(() => {
     return session.data?.user?.email;
@@ -98,25 +100,33 @@ const ConversationList: React.FC<ConversationListProps> = ({
         lg:block
         overflow-y-auto 
         border-r 
-        border-gray-200 
+        ${theme === 'light' ? 'border-gray-200' : 'border-gray-950'} 
+        ${theme === 'light' ? 'bg-white' : 'bg-gray-900'}
       `,
           isOpen ? 'hidden' : 'block w-full left-0'
         )}
       >
         <div className='px-5'>
           <div className='flex justify-between mb-4 pt-4'>
-            <div className='text-2xl font-bold text-neutral-800'>Messages</div>
+            <div
+              className={`text-2xl font-bold  ${
+                theme === 'light' ? 'text-neutral-800' : 'text-neutral-200'
+              }`}
+            >
+              Messages
+            </div>
             <div
               onClick={() => setIsModalOpen(true)}
-              className='
+              className={`
                 rounded-full 
                 p-2 
-                bg-gray-100 
-                text-gray-600 
+                ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'}
+               
+                ${theme === 'light' ? 'text-gray-600' : 'text-gray-200'} 
                 cursor-pointer 
                 hover:opacity-75 
                 transition
-              '
+              `}
             >
               <MdOutlineGroupAdd size={20} />
             </div>

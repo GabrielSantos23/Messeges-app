@@ -4,10 +4,11 @@ import Button from '@/app/components/Button';
 import Input from '@/app/components/Inputs/Input';
 import Select from '@/app/components/Inputs/Select';
 import Modal from '@/app/components/Modal';
+import { ThemeContext } from '@/app/components/ThemeContext';
 import { User } from '@prisma/client';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
@@ -24,6 +25,7 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const { theme } = useContext(ThemeContext);
 
   const {
     register,
@@ -60,10 +62,18 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='space-y-12'>
           <div className='border-b border-gray-900/10 pb-12'>
-            <h2 className='text-base font-semibold leading-7 text-gray-900'>
+            <h2
+              className={`text-base font-semibold leading-7 ${
+                theme === 'light' ? 'text-gray-900' : 'text-gray-200'
+              } `}
+            >
               Create a group chat
             </h2>
-            <p className='mt-1 text-sm leading-6 text-gray-600'>
+            <p
+              className={`mt-1 text-sm leading-6 ${
+                theme === 'light' ? 'text-gray-600' : 'text-gray-500'
+              }`}
+            >
               Create a chat with more than 2 people.
             </p>
             <div className='mt-10 flex flex-col gap-y-8'>
@@ -93,7 +103,12 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({
           </div>
         </div>
         <div className='mt-6 flex items-center justify-end gap-x-6'>
-          <Button disabled={isLoading} onClick={onClose} type='button'>
+          <Button
+            disabled={isLoading}
+            secondary
+            onClick={onClose}
+            type='button'
+          >
             Cancel
           </Button>
           <Button disabled={isLoading} type='submit'>

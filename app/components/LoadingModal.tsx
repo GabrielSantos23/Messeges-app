@@ -1,10 +1,13 @@
 'use client';
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ClipLoader } from 'react-spinners';
+import { ThemeContext } from './ThemeContext';
 
 const LoadingModal = () => {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <Transition.Root show as={Fragment}>
       <Dialog as='div' className='relative z-50' onClose={() => {}}>
@@ -17,7 +20,11 @@ const LoadingModal = () => {
           leaveFrom='opacity-100'
           leaveTo='opacity-0'
         >
-          <div className='fixed inset-0 bg-gray-100 bg-opacity-50 transition-opacity' />
+          <div
+            className={`fixed inset-0 ${
+              theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'
+            }  bg-opacity-50 transition-opacity`}
+          />
         </Transition.Child>
         <div className='fixed inset-0 z-10 overflow-y-auto'>
           <div className='flex min-h-full items-center justify-center p-4 text-center'>

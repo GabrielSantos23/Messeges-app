@@ -3,7 +3,7 @@
 import { User } from '@prisma/client';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useForm, FieldValues, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import Modal from '../Modal';
@@ -11,6 +11,7 @@ import Input from '../Inputs/Input';
 import Image from 'next/image';
 import { CldUploadButton } from 'next-cloudinary';
 import Button from '../Button';
+import { ThemeContext } from '../ThemeContext';
 
 interface SettingsModalProps {
   isOpen?: boolean;
@@ -25,7 +26,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { theme, setTheme } = useContext(ThemeContext);
 
+  function toggleTheme() {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  }
   const {
     register,
     handleSubmit,
@@ -63,10 +68,18 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='space-y-12'>
           <div className='border-b border-gray-900/10 pb-12'>
-            <h2 className='text-base font-semibold leading text-gray-900'>
+            <h2
+              className={`text-base font-semibold leading   ${
+                theme === 'light' ? 'text-gray-900' : 'text-gray-200'
+              }`}
+            >
               Profile
             </h2>
-            <p className='mt-1 text-sm leading-6 text-gray-600'>
+            <p
+              className={`mt-1 text-sm leading-6 ${
+                theme === 'light' ? 'text-gray-600' : 'text-gray-400'
+              }`}
+            >
               Edit your public information.
             </p>
             <div className='mt-10 flex flex-col gap-y-8'>
@@ -79,7 +92,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                 register={register}
               />
               <div>
-                <label className='block text-sm font-medium leading-6 text-gray-900'>
+                <label
+                  className={`block text-sm font-medium leading-6 ${
+                    theme === 'light' ? 'text-gray-900' : 'text-gray-200'
+                  }`}
+                >
                   Photo
                 </label>
                 <div className='mt-2 flex items-center gap-x-3'>
@@ -102,6 +119,16 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                     </Button>
                   </CldUploadButton>
                 </div>
+              </div>
+              <div className=''>
+                <label
+                  className={`block mb-2 text-sm font-medium leading-6 ${
+                    theme === 'light' ? 'text-gray-900' : 'text-gray-200'
+                  }`}
+                >
+                  Theme
+                </label>
+                <Button onClick={toggleTheme}>{theme}</Button>
               </div>
             </div>
           </div>

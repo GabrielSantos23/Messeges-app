@@ -1,11 +1,23 @@
 'use client';
 
+import { useContext } from 'react';
+import { ThemeContext } from './ThemeContext';
+
 const EmptyState = () => {
+  const { theme } = useContext(ThemeContext);
+
   return (
-    <div className='px-4 py-10 sm:px-6 lg:px-8 h-full flex justify-center items-center bg-gray-100'>
+    <div
+      className={`px-4 py-10 sm:px-6 lg:px-8 h-full flex justify-center items-center ${
+        theme === 'light' ? 'bg-gray-100' : 'bg-gray-800'
+      }`}
+    >
       <div className='text-center items-center flex flex-col'>
-        <h3 className='mt-2 text-2xl font-semibold text-gray-900'>
-          {' '}
+        <h3
+          className={`mt-2 text-2xl font-semibold ${
+            theme === 'light' ? 'text-gray-900' : 'text-gray-200'
+          } `}
+        >
           Select a chat or start a new conversation
         </h3>
       </div>

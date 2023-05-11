@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Conversation, Message, User } from '@prisma/client';
 import { format } from 'date-fns';
@@ -9,6 +9,7 @@ import { FullConversationType } from '@/app/types';
 import useOtherUser from '@/app/hooks/useOtherUser';
 import Avatar from '@/app/components/Avatar';
 import AvatarGroup from '@/app/components/AvatarGroup';
+import { ThemeContext } from '@/app/components/ThemeContext';
 
 interface ConversationBoxProps {
   data: FullConversationType;
@@ -22,6 +23,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
   const otherUser = useOtherUser(data);
   const session = useSession();
   const router = useRouter();
+  const { theme } = useContext(ThemeContext);
 
   const handleClick = useCallback(() => {
     router.push(`/conversations/${data.id}`);
@@ -66,8 +68,11 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
       onClick={handleClick}
       className={clsx(
         `
-  w-full relative flex items-center space-x-3 hover:bg-neutral-100 rounded-lg transition p-3 cursor-pointer`,
-        selected ? 'bg-neutral-100' : 'bg-white'
+  w-full relative flex items-center space-x-3 ${
+    theme === 'light' ? 'hover:bg-neutral-100' : 'hover:bg-gray-800'
+  }  rounded-lg transition p-3 cursor-pointer`,
+        theme === 'light' ? 'bg-white' : 'bg-gray-900',
+        selected && theme === 'light' ? 'bg-neutral-100' : 'bg-gray-600'
       )}
     >
       {data.isGroup ? (
@@ -78,7 +83,11 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
       <div className='min-w-0 flex-1'>
         <div className='focus:outline-none'>
           <div className='flex justify-between items-center mb-1'>
-            <p className='text-md font-medium text-gray-900'>
+            <p
+              className={`text-md font-medium ${
+                theme === 'light' ? 'text-neutral-800' : 'text-neutral-200'
+              }`}
+            >
               {data.name || otherUser.name}
             </p>
 
@@ -90,8 +99,11 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
           </div>
           <p
             className={clsx(
-              `truncate text-sm`,
-              hasSeen ? 'text-gray-500' : 'text-black font-medium'
+              `truncate text-sm text-gray-500`,
+              theme === 'light' &&
+                `${!hasSeen ? 'text-black font-medium' : 'text-gray-400/60'}`,
+              theme === 'dark' &&
+                `${!hasSeen ? 'text-white font-medium' : 'text-gray-500'}`
             )}
           >
             {lastMessageText}
