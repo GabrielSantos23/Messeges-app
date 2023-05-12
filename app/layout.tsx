@@ -11,11 +11,6 @@ import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
-  title: 'Messenger',
-  description: 'Messenger',
-};
-
 export default function RootLayout({
   children,
 }: {
