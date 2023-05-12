@@ -5,7 +5,7 @@ import AuthContext from './context/AuthContext';
 import ToasterContext from './context/ToasterContext';
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ThemeContext } from '@/app/components/ThemeContext';
 import Head from 'next/head';
 
@@ -21,16 +21,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [theme, setTheme] = useState(() => {
-    const storedTheme = localStorage.getItem('theme');
-    return storedTheme !== null && storedTheme !== undefined
-      ? storedTheme
-      : 'light';
-  });
+  const [theme, setTheme] = useState('light');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme !== null && storedTheme !== undefined) {
+        setTheme(storedTheme);
+      }
+    }
+  }, []);
 
   const updateTheme = (newTheme: string) => {
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('theme', newTheme);
+    }
   };
 
   return (
